@@ -1,4 +1,18 @@
 services:
+  product-service:
+    build: ./productservice
+    container_name: product_service
+    depends_on:
+      - postgres
+    environment:
+      SPRING_R2DBC_URL: r2dbc:postgresql://postgres:5432/productdb
+      SPRING_R2DBC_USERNAME: user
+      SPRING_R2DBC_PASSWORD: pass
+    ports:
+      - "8080:8080"
+    networks:
+      - product_network
+
   postgres:
     image: postgres:latest
     container_name: product_db
@@ -6,19 +20,11 @@ services:
       POSTGRES_DB: productdb
       POSTGRES_USER: user
       POSTGRES_PASSWORD: pass
-    volumes:
-      - ./db/productservice_init.sql:/docker-entrypoint-initdb.d/init.sql
+
     ports:
       - "5432:5432"
-
-  product-service:
-    build: .
-    container_name: product_service
-    depends_on:
-      - postgres
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/productdb
-      SPRING_DATASOURCE_USERNAME: user
-      SPRING_DATASOURCE_PASSWORD: pass
-    ports:
-      - "8080:8080"
+    networks:
+      - product_network
+networks:
+  product_network:
+    driver: bridge
