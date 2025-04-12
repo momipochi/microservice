@@ -14,15 +14,15 @@ services:
       - product_network
 
   postgres:
-    image: postgres:latest
+    image: postgres
     container_name: product_db
     environment:
       POSTGRES_DB: productdb
       POSTGRES_USER: user
       POSTGRES_PASSWORD: pass
-
     ports:
       - "5432:5432"
+    
     networks:
       - product_network
 networks:
