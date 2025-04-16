@@ -6,11 +6,11 @@ export default defineConfig({
   plugins: [
     react(),
     federation({
-      name: "remote_app",
+      name: "remoteApp",
       filename: "remoteEntry.js",
       // Modules to expose
       exposes: {
-        "./Product": "./src/Product",
+        "./Product": "./src/Product.tsx",
       },
       shared: ["react", "react-dom"],
     }),
@@ -20,5 +20,15 @@ export default defineConfig({
     target: "esnext",
     minify: false,
     cssCodeSplit: false,
+  },
+  preview: {
+    port: 5174,
+    strictPort: true,
+  },
+  server: {
+    port: 5174,
+    strictPort: true,
+    host: true,
+    origin: "http://0.0.0.0:5174",
   },
 });

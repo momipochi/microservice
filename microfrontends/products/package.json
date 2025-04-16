@@ -7,10 +7,11 @@
     "dev": "vite --port 5174 --strictPort",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview --port 5174 --strictPort",
+    "preview": "vite preview --host --port 5174 --strictPort",
     "start-mf": "npm run build && npm run preview"
   },
   "dependencies": {
+    "products": "file:",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },

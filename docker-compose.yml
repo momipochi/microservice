@@ -22,9 +22,29 @@ services:
       POSTGRES_PASSWORD: pass
     ports:
       - "5432:5432"
-    
     networks:
       - product_network
+
+  microfrontend-home:
+    build:
+      context: ./microfrontends/home
+      dockerfile: Dockerfile
+    container_name: mfe_home
+    ports:
+      - "5173:5173"
+    networks:
+      - product_network
+
+  microfrontend-products:
+    build:
+      context: ./microfrontends/products
+      dockerfile: Dockerfile
+    container_name: mfe_products
+    ports:
+      - "5174:5174"
+    networks:
+      - product_network
+
 networks:
   product_network:
     driver: bridge
