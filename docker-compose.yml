@@ -1,6 +1,6 @@
 services:
   product-service:
-    build: ./productservice
+    build: ./backend/products/productservice
     container_name: product_service
     depends_on:
       - postgres
