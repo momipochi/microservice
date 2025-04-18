@@ -8,5 +8,9 @@ public class ProductCreatedEvent {
     public ProductCreatedEvent(Product product) {
         this.product = product;
     }
-    
+
+    public Product getProduct() {
+        return product;
+    }
+
 }

@@ -3,6 +3,9 @@ spring:
     url: ${SPRING_R2DBC_URL}
     username: ${SPRING_R2DBC_USERNAME}
     password: ${SPRING_R2DBC_PASSWORD}
-
+  kafka:
+    bootstrap-servers: kafka-broker:9092
 server:
   port: 8080
+
+  

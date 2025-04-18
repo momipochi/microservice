@@ -1,0 +1,46 @@
+package com.productservice.productservice.kafka;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import org.apache.kafka.clients.admin.NewTopic;
+import org.apache.kafka.clients.producer.ProducerConfig;
+import org.apache.kafka.common.serialization.StringSerializer;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.kafka.core.DefaultKafkaProducerFactory;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.core.ProducerFactory;
+import org.springframework.kafka.support.serializer.JsonSerializer;
+
+@Configuration
+public class KafkaProducerConfig {
+    public final static String PRODUCT_CREATED_TOPIC = "product-created";
+    public final static String PRODUCT_DELETED_TOPIC = "product-deleted";
+
+    @Bean
+    public NewTopic productCreatedTopic() {
+        return new NewTopic(KafkaProducerConfig.PRODUCT_CREATED_TOPIC, 3, (short) 1); // 3 partitions, replication
+                                                                                      // factor 1
+    }
+
+    @Bean
+    public NewTopic productDeletedTopic() {
+        return new NewTopic(KafkaProducerConfig.PRODUCT_DELETED_TOPIC, 3, (short) 1); // 3 partitions, replication
+                                                                                      // factor 1
+    }
+
+    @Bean
+    public KafkaTemplate<String, Object> kafkaTemplate(ProducerFactory<String, Object> producerFactory) {
+        return new KafkaTemplate<>(producerFactory);
+    }
+
+    @Bean
+    public ProducerFactory<String, Object> producerFactory() {
+        Map<String, Object> config = new HashMap<>();
+        config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "kafka-broker:9092");
+        config.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        config.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
+        return new DefaultKafkaProducerFactory<>(config);
+    }
+}
