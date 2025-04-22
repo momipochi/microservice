@@ -23,6 +23,6 @@ public class ProductEventListener {
         doc.setDescription(event.getDescription());
         doc.setPrice(event.getPrice());
 
-        productRepository.save(doc);
+        productRepository.save(doc).subscribe();
     }
 }

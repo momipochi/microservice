@@ -26,20 +26,21 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
-    @GetMapping("/products")
-    @ResponseStatus(HttpStatus.OK)
-    public Flux<Product> getProductByName(@RequestParam(required = false) String name) {
-        if (name == null) {
-            return productService.findAll();
-        }
-        return productService.findByName(name).flux();
-    }
+    // @GetMapping("/products")
+    // @ResponseStatus(HttpStatus.OK)
+    // public Flux<Product> getProductByName(@RequestParam(required = false) String
+    // name) {
+    // if (name == null) {
+    // return productService.findAll();
+    // }
+    // return productService.findByName(name).flux();
+    // }
 
-    @GetMapping("/products/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public Mono<Product> getProductById(@PathVariable("id") String id) {
-        return productService.getProductRepository().findById(Integer.parseInt(id));
-    }
+    // @GetMapping("/products/{id}")
+    // @ResponseStatus(HttpStatus.OK)
+    // public Mono<Product> getProductById(@PathVariable("id") String id) {
+    // return productService.getProductRepository().findById(Integer.parseInt(id));
+    // }
 
     @PostMapping
     public Mono<ProductResponse> createProduct(@RequestBody ProductRequest request) {

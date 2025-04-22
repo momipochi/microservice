@@ -40,7 +40,8 @@ public class ProductService {
     public Mono<ProductResponse> createProduct(ProductRequest pr) {
         Product p = new Product(pr.name(), pr.description(), pr.price());
         return productRepository.save(p).doOnSuccess(saved -> {
-            ProductCreatedEvent event = new ProductCreatedEvent(p);
+            ProductCreatedEvent event = new ProductCreatedEvent(p.getId(), p.getName(), p.getDescription(),
+                    p.getPrice());
             kafkaTemplate.send(KafkaProducerConfig.PRODUCT_CREATED_TOPIC, p.getId() + "", event);
         }).map(this::toResponse);
     }

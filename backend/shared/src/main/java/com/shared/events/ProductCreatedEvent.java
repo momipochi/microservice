@@ -1,10 +1,7 @@
-package com.products.query.proudcts_query.events;
+package com.shared.events;
 
 import java.math.BigDecimal;
 
-import lombok.Data;
-
-@Data
 public class ProductCreatedEvent {
     private int id;
     private String name;
@@ -42,5 +39,4 @@ public class ProductCreatedEvent {
     public void setPrice(BigDecimal price) {
         this.price = price;
     }
-
 }
