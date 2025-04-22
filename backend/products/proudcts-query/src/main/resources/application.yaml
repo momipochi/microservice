@@ -1,9 +1,16 @@
 spring:
+  application:
+    name: proudcts-query
   data:
     mongodb:
       host: mongo
       port: 27017
       database: product-query-db
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
+    consumer:
+        group-id: ${KAFKA_CONSUMER_GROUP_ID}
+        
 management:
   endpoints:
     web:
