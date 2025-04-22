@@ -20,6 +20,7 @@ services:
     container_name: product_query_service
     depends_on:
       - kafka
+      - mongo
     ports:
       - "8081:8081"
     networks:
@@ -34,6 +35,13 @@ services:
       POSTGRES_PASSWORD: pass
     ports:
       - "5432:5432"
+    networks:
+      - product_network
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    ports:
+      - "27017:27017"
     networks:
       - product_network
 
