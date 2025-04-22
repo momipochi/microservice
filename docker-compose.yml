@@ -1,7 +1,7 @@
 services:
-  product-service:
+  product-command-service:
     build: ./backend/products/productservice
-    container_name: product_service
+    container_name: product_command_service
     depends_on:
       - postgres
       - kafka
@@ -13,6 +13,15 @@ services:
       - "8080:8080"
     volumes:
       - ./scripts/wait-for-it.sh:/app/scripts/wait-for-it.sh:ro
+    networks:
+      - product_network
+  product-query-service:
+    build: ./backend/products/proudcts-query
+    container_name: product_query_service
+    depends_on:
+      - kafka
+    ports:
+      - "8081:8081"
     networks:
       - product_network
 
