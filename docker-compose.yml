@@ -11,6 +11,8 @@ services:
       SPRING_R2DBC_PASSWORD: pass
     ports:
       - "8080:8080"
+    volumes:
+      - ./scripts/wait-for-it.sh:/app/scripts/wait-for-it.sh:ro
     networks:
       - product_network
 
@@ -45,18 +47,6 @@ services:
       - "5174:5174"
     networks:
       - product_network
-
-  zookeeper:
-    image: confluentinc/cp-zookeeper:7.6.0
-    container_name: zookeeper
-    environment:
-      ZOOKEEPER_CLIENT_PORT: 2181
-      ZOOKEEPER_TICK_TIME: 2000
-    ports:
-      - "2181:2181"
-    networks:
-      - product_network
-
   kafka:
     image: apache/kafka:latest
     container_name: kafka-broker
