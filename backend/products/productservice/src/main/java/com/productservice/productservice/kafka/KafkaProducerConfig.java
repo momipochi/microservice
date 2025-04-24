@@ -22,18 +22,6 @@ public class KafkaProducerConfig {
     private String bootstrapServers;
 
     @Bean
-    public NewTopic productCreatedTopic() {
-        return new NewTopic(KafkaProducerConfig.PRODUCT_CREATED_TOPIC, 3, (short) 1); // 3 partitions, replication
-                                                                                      // factor 1
-    }
-
-    @Bean
-    public NewTopic productDeletedTopic() {
-        return new NewTopic(KafkaProducerConfig.PRODUCT_DELETED_TOPIC, 3, (short) 1); // 3 partitions, replication
-                                                                                      // factor 1
-    }
-
-    @Bean
     public KafkaTemplate<String, Object> kafkaTemplate(ProducerFactory<String, Object> producerFactory) {
         return new KafkaTemplate<>(producerFactory);
     }

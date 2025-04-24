@@ -1,4 +1,19 @@
 services:
+  search-service:
+    build: ./backend/search/SearchService
+    container_name: search_service
+    depends_on:
+      - kafka
+      - elasticsearch
+      - init-kafka
+    environment:
+      - KAFKA_BOOTSTRAP_SERVERS=kafka-broker:9092
+      - ELASTICSEARCH_URI=http://elasticsearch:9200
+      - ASPNETCORE_URLS=http://+:8082
+    ports:
+      - "8082:8082"
+    networks:
+      - product_network
   product-command-service:
     build: ./backend/products/productservice
     container_name: product_command_service
@@ -28,7 +43,18 @@ services:
       - "8081:8081"
     networks:
       - product_network
-
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.13.4
+    container_name: elasticsearch
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - xpack.security.transport.ssl.enabled=false
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+    ports:
+      - "9200:9200"
+    networks:
+      - product_network
   postgres:
     image: postgres
     container_name: product_db
@@ -88,6 +114,25 @@ services:
     networks:
       - product_network
 
+  init-kafka:
+    image: confluentinc/cp-kafka:latest
+    depends_on:
+      - kafka
+    entrypoint: ["/bin/sh", "-c"]
+    command: |
+      "
+      # blocks until kafka is reachable
+      kafka-topics --bootstrap-server kafka:9092 --list
+
+      echo -e 'Creating kafka topics'
+      kafka-topics --bootstrap-server kafka:9092 --create --if-not-exists --topic product-created --replication-factor 1 --partitions 3
+      kafka-topics --bootstrap-server kafka:9092 --create --if-not-exists --topic product-deleted --replication-factor 1 --partitions 3
+
+      echo -e 'Successfully created the following topics:'
+      kafka-topics --bootstrap-server kafka:9092 --list
+      "
+    networks:
+      - product_network
 networks:
   product_network:
     driver: bridge
