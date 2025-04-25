@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using System.Text.Json.Serialization;
 using Confluent.Kafka;
 using Nest;
 using SearchService.Models;
@@ -34,27 +35,41 @@ public class KafkaConsumer : BackgroundService
 
         while (!stoppingToken.IsCancellationRequested)
         {
-            ProcessKafkaMessage(stoppingToken);
+            await ProcessKafkaMessage(stoppingToken);
 
-            await Task.Delay(TimeSpan.FromMinutes(1), stoppingToken);
         }
 
-        _consumer.Close();
     }
 
-    private void ProcessKafkaMessage(CancellationToken stoppingToken)
+    private async Task ProcessKafkaMessage(CancellationToken stoppingToken)
     {
         try
         {
             var consumeResult = _consumer.Consume(stoppingToken);
+            if (consumeResult.Message.Value != null)
+            {
+                var message = JsonSerializer.Deserialize<Product>(consumeResult.Message.Value);
+                _logger.LogInformation("Got your message: {Value}, Deserializing...",consumeResult.Message.Value);
 
-            var message = consumeResult.Message.Value;
-
-            _logger.LogInformation($"Received product update: {message}");
+                if (message != null)
+                {
+                    _logger.LogInformation("Indexed product: {Id}",message.Id);
+                    await _elasticClient.IndexDocumentAsync(message, stoppingToken);
+                }
+                else
+                {
+                    _logger.LogError("Could not deserialize message: {Message}", consumeResult.Message.Value);
+                }
+            }
+            
+        }
+        catch (ConsumeException e)
+        {
+            _logger.LogError(e, "Error while consuming Kafka message");
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Error processing Kafka message: {ex.Message}");
+            _logger.LogError(ex, "Unexpected error");
         }
     }
     public override void Dispose()
