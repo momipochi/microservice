@@ -31,13 +31,15 @@ public class KafkaConsumer : BackgroundService
     }
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        _logger.LogInformation("Kafka consumer started.");
-
-        while (!stoppingToken.IsCancellationRequested)
+        await Task.Run(async () =>
         {
-            await ProcessKafkaMessage(stoppingToken);
+            _logger.LogInformation("Kafka consumer started.");
 
-        }
+            while (!stoppingToken.IsCancellationRequested)
+            {
+                await ProcessKafkaMessage(stoppingToken);
+            }
+        },stoppingToken);
 
     }
 
