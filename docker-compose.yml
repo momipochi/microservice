@@ -138,7 +138,7 @@ services:
       kafka-topics --bootstrap-server kafka:9092 --list
 
       echo -e 'Creating kafka topics'
-      kafka-topics --bootstrap-server kafka:9092 --create --if-not-exists --topic product-created --replication-factor 1 --partitions 3
+      kafka-topics --bootstrap-server kafka:9092 --create --if-not-exists --topic product-created-event --replication-factor 1 --partitions 3
       kafka-topics --bootstrap-server kafka:9092 --create --if-not-exists --topic product-deleted --replication-factor 1 --partitions 3
       kafka-topics --bootstrap-server kafka:9092 --create --if-not-exists --topic price-drop-events --replication-factor 1 --partitions 3
 

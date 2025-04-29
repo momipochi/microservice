@@ -1,13 +1,12 @@
 package com.productservice.productservice.models;
 
 import java.math.BigDecimal;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.relational.core.mapping.Table;
 
-@Table(name = "products")
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor
 public class Product {
-    @Id
-    private int id;
+
     private String name;
     private String description;
     private BigDecimal price;
@@ -16,14 +15,6 @@ public class Product {
         this.name = name;
         this.description = description;
         this.price = price;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getName() {

@@ -3,7 +3,6 @@ package com.productservice.productservice.kafka;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,8 +15,6 @@ import org.springframework.kafka.support.serializer.JsonSerializer;
 
 @Configuration
 public class KafkaProducerConfig {
-    public final static String PRODUCT_CREATED_TOPIC = "product-created";
-    public final static String PRODUCT_DELETED_TOPIC = "product-deleted";
     @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapServers;
 

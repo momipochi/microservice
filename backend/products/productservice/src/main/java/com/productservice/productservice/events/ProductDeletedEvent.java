@@ -1,9 +1,11 @@
 package com.productservice.productservice.events;
 
-public class ProductDeletedEvent {
-    public int productId;
+import java.util.UUID;
 
-    public ProductDeletedEvent(int id) {
+public class ProductDeletedEvent {
+    public UUID productId;
+
+    public ProductDeletedEvent(UUID id) {
         this.productId = id;
     }
 

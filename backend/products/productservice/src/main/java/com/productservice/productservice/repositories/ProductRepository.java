@@ -1,14 +1,13 @@
 package com.productservice.productservice.repositories;
 
+import java.util.UUID;
+
 import org.springframework.data.r2dbc.repository.R2dbcRepository;
 import org.springframework.stereotype.Repository;
 
-import com.productservice.productservice.models.Product;
-
-import reactor.core.publisher.Mono;
+import com.productservice.productservice.domain.ProductDomain;
 
 @Repository
-public interface ProductRepository extends R2dbcRepository<Product, Integer> {
+public interface ProductRepository extends R2dbcRepository<ProductDomain, UUID> {
 
-    Mono<Product> findByName(String name);
 }
