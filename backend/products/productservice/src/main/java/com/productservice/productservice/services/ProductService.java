@@ -68,7 +68,7 @@ public class ProductService {
         return productRepository.save(pd).doOnSuccess(saved -> {
             ProductCreatedEvent event = new ProductCreatedEvent(saved.getAggregateId(), p.getName(), p.getDescription(),
                     p.getPrice());
-            kafkaTemplate.send(EventTypes.PRODUCT_CREATED_EVENT, saved.getAggregateId() + "", event);
+            kafkaTemplate.send(EventTypes.PRODUCT_CREATED_EVENT, saved.getAggregateId().toString(), event);
         }).map(t -> {
             try {
                 return toResponse(t);
