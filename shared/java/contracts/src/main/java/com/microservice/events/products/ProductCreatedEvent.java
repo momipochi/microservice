@@ -1,4 +1,4 @@
-package com.microservice.events;
+package com.microservice.events.products;
 
 import java.math.BigDecimal;
 import java.util.UUID;

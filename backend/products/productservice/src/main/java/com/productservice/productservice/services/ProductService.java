@@ -11,7 +11,8 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.microservice.events.ProductCreatedEvent;
+import com.microservice.events.products.ProductCreatedEvent;
+import com.microservice.events.products.ProductDeletedEvent;
 import com.productservice.productservice.constants.EventTypes;
 import com.productservice.productservice.domain.ProductDomain;
 import com.productservice.productservice.dto.ProductRequest;
@@ -37,10 +38,11 @@ public class ProductService {
         return productRepository;
     }
 
-    public Flux<Product> findAll() {
+    public Flux<ProductResponse> findAll() {
         return productRepository.findAll().map(x -> {
             try {
-                return x.getDeserializedData();
+                Product p = x.getDeserializedData();
+                return new ProductResponse(x.getAggregateId(), p.getName(), p.getDescription(), p.getPrice());
             } catch (JsonProcessingException e) {
                 logger.error("Error deserializing data for domain: {}", x.getId(), e);
                 return null;
@@ -83,14 +85,13 @@ public class ProductService {
     }
 
     public Mono<Void> deleteProduct(UUID id) {
-        return null;
-        // return productRepository.findById(id)
-        // .flatMap(product -> productRepository.delete(product)
-        // .doOnSuccess(unused -> {
-        // ProductDeletedEvent event = new ProductDeletedEvent(product.getId());
-        // kafkaTemplate.send(EventTypes.PRODUCT_DELETED_EVENT, product.getId() + "",
-        // event);
-        // }));
+        return productRepository.findById(id)
+                .flatMap(product -> productRepository.delete(product)
+                        .doOnSuccess(unused -> {
+                            ProductDeletedEvent event = new ProductDeletedEvent(product.getId());
+                            kafkaTemplate.send(EventTypes.PRODUCT_DELETED_EVENT, product.getId() + "",
+                                    event);
+                        }));
     }
 
     private ProductResponse toResponse(ProductDomain domain) throws JsonMappingException, JsonProcessingException {

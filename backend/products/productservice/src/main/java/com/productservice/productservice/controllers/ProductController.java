@@ -27,12 +27,8 @@ public class ProductController {
 
     // @GetMapping("/products")
     // @ResponseStatus(HttpStatus.OK)
-    // public Flux<Product> getProductByName(@RequestParam(required = false) String
-    // name) {
-    // if (name == null) {
+    // public Flux<ProductResponse> getProducts() {
     // return productService.findAll();
-    // }
-    // return productService.findByName(name).flux();
     // }
 
     // @GetMapping("/products/{id}")

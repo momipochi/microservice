@@ -1,4 +1,4 @@
-package com.productservice.productservice.events;
+package com.microservice.events.products;
 
 import java.util.UUID;
 

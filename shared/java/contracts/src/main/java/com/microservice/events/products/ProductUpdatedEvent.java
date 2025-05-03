@@ -1,15 +1,15 @@
-package com.productservice.productservice.events;
+package com.microservice.events.products;
 
 import java.math.BigDecimal;
 import java.util.UUID;
 
-public class ProductCreatedEvent {
+public class ProductUpdatedEvent {
     private UUID id;
     private String name;
     private String description;
     private BigDecimal price;
 
-    public ProductCreatedEvent(UUID id, String name, String description, BigDecimal price) {
+    public ProductUpdatedEvent(UUID id, String name, String description, BigDecimal price) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -47,5 +47,4 @@ public class ProductCreatedEvent {
     public void setPrice(BigDecimal price) {
         this.price = price;
     }
-
 }

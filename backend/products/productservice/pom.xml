@@ -67,11 +67,10 @@
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
         <dependency>
-			<groupId>com.microservice</groupId>
-			<artifactId>contracts</artifactId>
-			<version>1.0-20250503.063739-2</version>
-			
-		</dependency>
+  <groupId>com.microservice</groupId>
+  <artifactId>contracts</artifactId>
+  <version>1.0-20250503.074043-3</version>
+</dependency>
         
     </dependencies>
 
