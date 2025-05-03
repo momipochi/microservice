@@ -28,7 +28,10 @@ services:
     networks:
       - product_network
   product-command-service:
-    build: ./backend/products/productservice
+    build:
+      context: ./backend/products/productservice
+      args:
+        MAVEN_BUILD_ARGS: "-Pdocker"
     container_name: product_command_service
     depends_on:
       - postgres
@@ -41,8 +44,10 @@ services:
       - "8080:8080"
     volumes:
       - ./scripts/wait-for-it.sh:/app/scripts/wait-for-it.sh:ro
+      - C:/Users/ander/scoop/apps/maven/current/conf/settings.xml:/root/.m2/settings.xml:ro
     networks:
       - product_network
+      - nexus_shared_net
   product-query-service:
     build: ./backend/products/proudcts-query
     container_name: product_query_service
@@ -147,6 +152,9 @@ services:
       "
     networks:
       - product_network
+
 networks:
   product_network:
     driver: bridge
+  nexus_shared_net:
+    external: true

@@ -4,8 +4,14 @@ WORKDIR /app
 
 COPY pom.xml .
 COPY src ./src
+COPY /settings.xml /root/.m2/settings.xml
 
-RUN mvn clean package -DskipTests
+# Add this before RUN
+ARG MAVEN_BUILD_ARGS=""
+
+# Modify the build step
+RUN mvn clean package -DskipTests $MAVEN_BUILD_ARGS
+
 
 # Second stage: Run the JAR
 FROM openjdk:21-jdk-slim

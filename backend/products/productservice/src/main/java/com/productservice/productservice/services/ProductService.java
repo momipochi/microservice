@@ -11,24 +11,27 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.microservice.events.ProductCreatedEvent;
 import com.productservice.productservice.constants.EventTypes;
 import com.productservice.productservice.domain.ProductDomain;
 import com.productservice.productservice.dto.ProductRequest;
 import com.productservice.productservice.dto.ProductResponse;
-import com.productservice.productservice.events.ProductCreatedEvent;
 import com.productservice.productservice.models.Product;
 import com.productservice.productservice.repositories.ProductRepository;
 
-import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Service
-@RequiredArgsConstructor
 public class ProductService {
     private final ProductRepository productRepository;
     private final KafkaTemplate<String, Object> kafkaTemplate;
     Logger logger = LoggerFactory.getLogger(ProductService.class);
+
+    public ProductService(ProductRepository productRepository, KafkaTemplate<String, Object> kafkaTemplate) {
+        this.productRepository = productRepository;
+        this.kafkaTemplate = kafkaTemplate;
+    }
 
     public ProductRepository getProductRepository() {
         return productRepository;
@@ -66,8 +69,8 @@ public class ProductService {
         pd.setData(productJsonString);
         pd.setEventType(EventTypes.PRODUCT_CREATED_EVENT);
         return productRepository.save(pd).doOnSuccess(saved -> {
-            ProductCreatedEvent event = new ProductCreatedEvent(saved.getAggregateId(), p.getName(), p.getDescription(),
-                    p.getPrice());
+            ProductCreatedEvent event = new ProductCreatedEvent(saved.getAggregateId(), productJsonString,
+                    productJsonString, p.getPrice());
             kafkaTemplate.send(EventTypes.PRODUCT_CREATED_EVENT, saved.getAggregateId().toString(), event);
         }).map(t -> {
             try {

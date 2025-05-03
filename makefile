@@ -14,4 +14,9 @@ rebuild-s:
 list:
 	docker compose config --services
 
-
+nexus-rebuild:
+	docker-compose -f docker-compose-nexus.yml down
+	docker-compose -f docker-compose-nexus.yml up -d
+jfrog-rebuild:
+	docker-compose -f docker-compose-jfrog.yml down
+	docker-compose -f docker-compose-jfrog.yml up -d

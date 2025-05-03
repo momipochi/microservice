@@ -1,0 +1,16 @@
+services:
+  nexus:
+    image: sonatype/nexus3:latest # Official Nexus image
+    restart: always
+    container_name: nexus
+    ports:
+      - "8088:8081"
+    volumes:
+      - "nexus-data:/sonatype-work"
+    networks:
+      - nexus_shared_net
+volumes:
+  nexus-data: {}
+networks:
+  nexus_shared_net:
+    driver: bridge
