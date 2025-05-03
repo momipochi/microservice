@@ -36,6 +36,7 @@ services:
     depends_on:
       - postgres
       - kafka
+
     environment:
       SPRING_R2DBC_URL: r2dbc:postgresql://postgres:5432/productdb
       SPRING_R2DBC_USERNAME: user
@@ -57,6 +58,7 @@ services:
     depends_on:
       - kafka
       - mongo
+      - product-command-service
     ports:
       - "8081:8081"
     networks:
@@ -144,7 +146,7 @@ services:
 
       echo -e 'Creating kafka topics'
       kafka-topics --bootstrap-server kafka:9092 --create --if-not-exists --topic product-created-event --replication-factor 1 --partitions 3
-      kafka-topics --bootstrap-server kafka:9092 --create --if-not-exists --topic product-deleted --replication-factor 1 --partitions 3
+      kafka-topics --bootstrap-server kafka:9092 --create --if-not-exists --topic product-deleted-event --replication-factor 1 --partitions 3
       kafka-topics --bootstrap-server kafka:9092 --create --if-not-exists --topic price-drop-events --replication-factor 1 --partitions 3
 
       echo -e 'Successfully created the following topics:'

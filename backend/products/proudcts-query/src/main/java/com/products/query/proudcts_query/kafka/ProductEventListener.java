@@ -3,7 +3,7 @@ package com.products.query.proudcts_query.kafka;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
-import com.products.query.proudcts_query.events.ProductCreatedEvent;
+import com.microservice.events.products.ProductCreatedEvent;
 import com.products.query.proudcts_query.models.ProductDocument;
 import com.products.query.proudcts_query.repositories.ProductRepository;
 

@@ -59,12 +59,56 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
-			<scope>provided</scope>
-		</dependency>
-	</dependencies>
+    <groupId>org.projectlombok</groupId>
+    <artifactId>lombok</artifactId>
+    <version>1.18.38</version>
+    <scope>provided</scope>
+</dependency>
+<dependency>
+  <groupId>com.microservice</groupId>
+  <artifactId>contracts</artifactId>
+  <version>1.0-20250503.074043-3</version>
+</dependency>
 
+	</dependencies>
+<profiles>
+    <profile>
+        <id>local</id>
+        <activation>
+            <activeByDefault>true</activeByDefault>
+        </activation>
+        <repositories>
+            <repository>
+                <id>event-contracts</id>
+                <url>http://localhost:8088/repository/event-contracts/</url>
+            </repository>
+            <repository>
+                <id>central</id>
+                <url>https://repo.maven.apache.org/maven2</url>
+            </repository>
+        </repositories>
+    </profile>
+
+    <profile>
+        <id>docker</id>
+        <activation>
+            <property>
+                <name>env.ACTIVE_PROFILE</name>
+                <value>docker</value>
+            </property>
+        </activation>
+        <repositories>
+            <repository>
+                <id>event-contracts</id>
+                <url>http://host.docker.internal:8088/repository/event-contracts/</url>
+            </repository>
+            <repository>
+                <id>central</id>
+                <url>https://repo.maven.apache.org/maven2</url>
+            </repository>
+        </repositories>
+    </profile>
+</profiles>
 	<build>
 		<plugins>
 			<plugin>

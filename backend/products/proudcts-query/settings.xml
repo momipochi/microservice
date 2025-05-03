@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<settings xmlns="http://maven.apache.org/SETTINGS/1.2.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.2.0 https://maven.apache.org/xsd/settings-1.2.0.xsd">
+  
+  
+  <pluginGroups>
+  
+  </pluginGroups>
+
+
+  <proxies>
+
+  </proxies>
+
+  <servers>
+
+    <server>
+        <id>nexus</id>
+        <username>admin</username>
+        <password>f6ad3a55-f736-472c-9fc8-2e73a3c3da9a</password>
+    </server>
+  </servers>
+
+  <mirrors>
+   
+     
+    <mirror>
+  <id>internal-nexus</id>
+  <mirrorOf>*,!central,!confluent</mirrorOf>
+  <url>http://host.docker.internal:8088/repository/event-contracts/</url>
+</mirror>
+  </mirrors>
+
+  <profiles>
+  </profiles>
+
+</settings>

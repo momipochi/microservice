@@ -14,13 +14,13 @@ import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
 
-import com.products.query.proudcts_query.events.ProductCreatedEvent;
+import com.microservice.events.products.ProductCreatedEvent;
 
 @EnableKafka
 @Configuration
 public class KafkaConsumerConfig {
-    public final static String PRODUCT_CREATED_TOPIC = "product-created";
-    public final static String PRODUCT_DELETED_TOPIC = "product-deleted";
+    public final static String PRODUCT_CREATED_TOPIC = "product-created-event";
+    public final static String PRODUCT_DELETED_TOPIC = "product-deleted-event";
 
     @Value("${spring.kafka.consumer.group-id}")
     private String groupId;
