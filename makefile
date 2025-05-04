@@ -19,3 +19,10 @@ list:
 nexus-rebuild:
 	docker-compose -f docker-compose-nexus.yml down
 	docker-compose -f docker-compose-nexus.yml up -d
+
+
+rebuild-product:
+	docker compose down
+	docker compose up -d --build product-command-service
+	docker compose up -d --build product-query-service
+	

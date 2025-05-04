@@ -2,6 +2,9 @@ package com.productservice.productservice.models;
 
 import java.math.BigDecimal;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
@@ -41,4 +44,9 @@ public class Product {
         this.price = price;
     }
 
+    public String serialize() throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        String result = mapper.writeValueAsString(this);
+        return result;
+    }
 }

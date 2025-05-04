@@ -1,5 +1,7 @@
 package com.products.query.proudcts_query.services;
 
+import java.util.UUID;
+
 import org.springframework.stereotype.Service;
 
 import com.products.query.proudcts_query.models.ProductDocument;
@@ -18,7 +20,7 @@ public class ProductService {
         return productRepository.findAll();
     }
 
-    public Mono<ProductDocument> findById(int id) {
+    public Mono<ProductDocument> findById(UUID id) {
         return productRepository.findById(id);
     }
 

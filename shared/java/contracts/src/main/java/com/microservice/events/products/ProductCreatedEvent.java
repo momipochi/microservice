@@ -8,13 +8,7 @@ public class ProductCreatedEvent {
     private String name;
     private String description;
     private BigDecimal price;
-
-    public ProductCreatedEvent(UUID id, String name, String description, BigDecimal price) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.price = price;
-    }
+    private int diff = 0;
 
     public UUID getId() {
         return id;

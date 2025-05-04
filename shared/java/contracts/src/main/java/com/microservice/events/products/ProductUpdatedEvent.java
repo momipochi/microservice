@@ -9,13 +9,6 @@ public class ProductUpdatedEvent {
     private String description;
     private BigDecimal price;
 
-    public ProductUpdatedEvent(UUID id, String name, String description, BigDecimal price) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.price = price;
-    }
-
     public UUID getId() {
         return id;
     }

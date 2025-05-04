@@ -3,10 +3,14 @@ package com.microservice.events.products;
 import java.util.UUID;
 
 public class ProductDeletedEvent {
-    public UUID productId;
+    private UUID productId;
 
-    public ProductDeletedEvent(UUID id) {
-        this.productId = id;
-    }
+        public UUID getProductId() {
+            return productId;
+        }
+
+        public void setProductId(UUID productId) {
+            this.productId = productId;
+        }
 
 }

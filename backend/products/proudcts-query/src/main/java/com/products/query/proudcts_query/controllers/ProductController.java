@@ -1,5 +1,7 @@
 package com.products.query.proudcts_query.controllers;
 
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,7 +35,7 @@ public class ProductController {
 
     @GetMapping("/products/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Mono<ProductDocument> getProductById(@PathVariable("id") String id) {
-        return productService.findById(Integer.parseInt(id));
+    public Mono<ProductDocument> getProductById(@PathVariable("id") UUID id) {
+        return productService.findById(id);
     }
 }

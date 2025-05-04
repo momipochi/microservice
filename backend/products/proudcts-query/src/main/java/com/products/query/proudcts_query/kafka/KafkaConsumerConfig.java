@@ -15,12 +15,11 @@ import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
 
 import com.microservice.events.products.ProductCreatedEvent;
+import com.microservice.events.products.ProductUpdatedEvent;
 
 @EnableKafka
 @Configuration
 public class KafkaConsumerConfig {
-    public final static String PRODUCT_CREATED_TOPIC = "product-created-event";
-    public final static String PRODUCT_DELETED_TOPIC = "product-deleted-event";
 
     @Value("${spring.kafka.consumer.group-id}")
     private String groupId;
@@ -46,6 +45,27 @@ public class KafkaConsumerConfig {
     public ConcurrentKafkaListenerContainerFactory<String, ProductCreatedEvent> kafkaListenerContainerFactory() {
         ConcurrentKafkaListenerContainerFactory<String, ProductCreatedEvent> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactory());
+        return factory;
+    }
+
+    @Bean
+    public ConsumerFactory<String, ProductUpdatedEvent> productUpdatedConsumerFactory() {
+        JsonDeserializer<ProductUpdatedEvent> deserializer = new JsonDeserializer<>(ProductUpdatedEvent.class);
+        deserializer.addTrustedPackages("*");
+
+        Map<String, Object> props = new HashMap<>();
+        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
+        props.put(ConsumerConfig.GROUP_ID_CONFIG, groupId);
+        props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, deserializer);
+
+        return new DefaultKafkaConsumerFactory<>(props, new StringDeserializer(), deserializer);
+    }
+
+    @Bean
+    public ConcurrentKafkaListenerContainerFactory<String, ProductUpdatedEvent> productUpdatedContainerFactory() {
+        ConcurrentKafkaListenerContainerFactory<String, ProductUpdatedEvent> factory = new ConcurrentKafkaListenerContainerFactory<>();
+        factory.setConsumerFactory(productUpdatedConsumerFactory());
         return factory;
     }
 }
