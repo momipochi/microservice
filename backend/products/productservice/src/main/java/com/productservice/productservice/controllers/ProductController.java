@@ -27,18 +27,6 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
-    // @GetMapping("/products")
-    // @ResponseStatus(HttpStatus.OK)
-    // public Flux<ProductResponse> getProducts() {
-    // return productService.findAll();
-    // }
-
-    // @GetMapping("/products/{id}")
-    // @ResponseStatus(HttpStatus.OK)
-    // public Mono<Product> getProductById(@PathVariable("id") String id) {
-    // return productService.getProductRepository().findById(Integer.parseInt(id));
-    // }
-
     @PostMapping
     public ResponseEntity<Mono<ProductResponse>> createProduct(@RequestBody ProductRequest request) {
         try {

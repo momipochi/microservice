@@ -25,4 +25,5 @@ rebuild-product:
 	docker compose down
 	docker compose up -d --build product-command-service
 	docker compose up -d --build product-query-service
+	docker compose up -d --build search-service
 	

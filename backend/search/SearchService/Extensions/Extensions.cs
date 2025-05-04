@@ -1,4 +1,5 @@
 ﻿using Nest;
+using SearchService.Events.Products;
 using SearchService.Kafka;
 
 namespace SearchService.Extensions;
@@ -7,7 +8,8 @@ public static class Extensions
 {
     public static IServiceCollection AddKafkaConfigs(this IServiceCollection services)
     {
-        services.AddHostedService<KafkaConsumer>();
+        services.AddHostedService<ProductCreatedConsumer>();
+        services.AddHostedService<ProductUpdatedConsumer>();
         return services;
     }
     public static IServiceCollection AddElasticConfigs(this IServiceCollection services, IConfiguration configuration)

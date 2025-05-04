@@ -1,11 +1,11 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace SearchService.Models;
+namespace SearchService.Events.Products;
 
-public class Product
+public class ProductCreatedEvent
 {
-    [JsonPropertyName("id")]
-    public Guid Id { get; set; } 
+    [JsonPropertyName("id")] 
+    public Guid Id { get; set; } = Guid.Empty; 
     [JsonPropertyName("name")]
 
     public string Name { get; set; } = null!;
