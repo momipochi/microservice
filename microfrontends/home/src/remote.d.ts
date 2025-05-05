@@ -1,1 +1,2 @@
-declare module "remoteApp/Product";
+declare module "productRemote/Product";
+declare module "searchRemote/Search";
