@@ -10,7 +10,10 @@ export default defineConfig({
       filename: "remoteEntry.js",
       // Modules to expose
       exposes: {
-        "./Product": "./src/Product.tsx",
+        "./Product": {
+          import: "./src/Product.tsx",
+          name: "default", // 👈 explicitly expose it as the default export
+        },
       },
       shared: ["react", "react-dom"],
     }),

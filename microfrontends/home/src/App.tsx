@@ -2,9 +2,15 @@ import { lazy, Suspense } from "react";
 import "./App.css";
 
 const Product = lazy(() =>
-  import("productRemote/Product").then((x) => x.Empty)
+  import("productRemote/Product").then((mod) => ({
+    default: mod.default?.Product || mod.Product, // Try both
+  }))
 );
-const Search = lazy(() => import("searchRemote/Search").then((x) => x.Empty));
+const Search = lazy(() =>
+  import("searchRemote/Search").then((mod) => ({
+    default: mod.default?.Search || mod.Search, // Try both
+  }))
+);
 
 function App() {
   return (
