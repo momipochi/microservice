@@ -1,13 +1,16 @@
 import { Link } from '@tanstack/react-router'
+import { Search } from './Search'
 
 export default function Header() {
   return (
-    <header className="p-2 flex gap-2 bg-white text-black justify-between">
+    <header className="p-2 flex gap-2 bg-white text-black ">
       <nav className="flex flex-row">
         <div className="px-2 font-bold">
           <Link to="/">Home</Link>
         </div>
+        <div>Some other routes in the future</div>
       </nav>
+      <Search />
     </header>
   )
 }
