@@ -22,4 +22,15 @@ public static class Extensions
         services.AddSingleton<IElasticClient>(new ElasticClient(settings));
         return services;
     }
+    public static IServiceCollection AddCorsConfig(this IServiceCollection services)
+    {
+        services.AddCors(options =>
+        {
+            options.AddPolicy("AllowLocalhost",
+                builder => builder.WithOrigins("http://localhost:3000", "http://localhost:5173")
+                    .AllowAnyHeader()
+                    .AllowAnyMethod());
+        });
+        return services;
+    }
 }

@@ -12,7 +12,7 @@ builder.Services.AddKafkaConfigs();
 builder.Services.AddElasticConfigs(builder.Configuration);
 builder.Services.AddScoped<ProductSearchService>();
 builder.Services.AddAutoMapper(typeof(Program));
-
+builder.Services.AddCorsConfig();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -21,6 +21,7 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
+app.UseCors("AllowLocalhost");
 app.UseHttpsRedirection();
 
 

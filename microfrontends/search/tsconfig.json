@@ -1,7 +1,6 @@
 {
   "include": [
     "**/*.ts",
-    "**/*.tsx",
     "eslint.config.js",
     "prettier.config.js",
     "vite.config.js"
@@ -15,7 +14,8 @@
     "types": ["vite/client"],
 
     /* Bundler mode */
-    "moduleResolution": "bundler",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
     "allowImportingTsExtensions": true,
     "verbatimModuleSyntax": true,
     "noEmit": true,

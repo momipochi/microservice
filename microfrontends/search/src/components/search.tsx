@@ -1,6 +1,9 @@
 import { useEffect, useRef, useState } from 'react'
 import { Input } from './ui/input'
 import { Button } from './ui/button'
+import { useQuery } from '@tanstack/react-query'
+import { searchService, type Product } from '@/services/searchService'
+
 const mockResults = [
   'Apple',
   'Banana',
@@ -14,7 +17,14 @@ export const Search = () => {
   const [query, setQuery] = useState('')
   const [open, setOpen] = useState(false)
   const wrapperRef = useRef(null)
-
+  const { data } = useQuery({
+    queryKey: ['products', query],
+    queryFn: async (): Promise<Product[]> => {
+      return await searchService.getProductsByQuery(query)
+    },
+    enabled: query.length > 0,
+    refetchOnWindowFocus: false,
+  })
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -28,10 +38,11 @@ export const Search = () => {
     document.addEventListener('mousedown', handleClickOutside)
   }, [])
 
-  const filtered = mockResults.filter((item) =>
-    item.toLowerCase().includes(query.toLowerCase()),
-  )
-
+  const filtered = data
+    ? data.filter((product: { name: string }) =>
+        product.name.toLowerCase().includes(query.toLowerCase()),
+      )
+    : []
   return (
     <div className="relative w-full max-w-md" ref={wrapperRef}>
       <div className="flex items-center gap-2 w-full">
@@ -53,11 +64,11 @@ export const Search = () => {
               key={i}
               onClick={() => {
                 console.log('Setting query: ', filtered[i])
-                setQuery(filtered[i])
+                setQuery(filtered[i].name)
                 setOpen(false)
               }}
             >
-              {x}
+              {x.name}
             </div>
           ))}
         </div>

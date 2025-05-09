@@ -24,7 +24,6 @@ declare module '@tanstack/react-router' {
     router: typeof router
   }
 }
-
 // Render the app
 const rootElement = document.getElementById('app')
 if (rootElement && !rootElement.innerHTML) {
