@@ -11,7 +11,7 @@
     "lint": "eslint",
     "format": "prettier",
     "check": "prettier --write . && eslint --fix",
-    "preview": "vite preview --host --port 5175 --strictPort"
+    "preview": "vite build && tsc && vite preview --host --port 5175 --strictPort"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.13",

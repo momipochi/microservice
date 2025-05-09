@@ -4,15 +4,6 @@ import { Button } from './ui/button'
 import { useQuery } from '@tanstack/react-query'
 import { searchService, type Product } from '@/services/searchService'
 
-const mockResults = [
-  'Apple',
-  'Banana',
-  'Blueberry',
-  'Mango',
-  'Orange',
-  'Strawberry',
-]
-
 export const Search = () => {
   const [query, setQuery] = useState('')
   const [open, setOpen] = useState(false)

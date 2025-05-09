@@ -19,7 +19,7 @@ export default defineConfig({
       exposes: {
         './Search': './src/components/search.tsx',
       },
-      shared: ['react', 'react-dom'],
+      shared: ['react', 'react-dom', '@tanstack/react-query'],
     }),
   ],
   test: {

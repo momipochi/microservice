@@ -1,5 +1,6 @@
 import { lazy, Suspense } from "react";
 import "./App.css";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const Product = lazy(() =>
   import("productRemote/Product").then((mod) => ({
@@ -12,15 +13,18 @@ const Search = lazy(() =>
   }))
 );
 
+const queryClient = new QueryClient();
 function App() {
   return (
     <>
-      <Suspense fallback={<div>Loading remote component...</div>}>
-        <Product />
-      </Suspense>
-      <Suspense fallback={<div>Loading remote component...</div>}>
-        <Search />
-      </Suspense>
+      <QueryClientProvider client={queryClient}>
+        {/* <Suspense fallback={<div>Loading remote component...</div>}>
+          <Product />
+        </Suspense> */}
+        <Suspense fallback={<div>Loading remote component...</div>}>
+          <Search />
+        </Suspense>
+      </QueryClientProvider>
     </>
   );
 }

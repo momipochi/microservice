@@ -12,7 +12,7 @@ export default defineConfig({
         productRemote: "http://localhost:5174/assets/remoteEntry.js",
         searchRemote: "http://localhost:5175/assets/remoteEntry.js",
       },
-      shared: ["react", "react-dom"],
+      shared: ["react", "react-dom", "@tanstack/react-query"],
     }),
   ],
   build: {
@@ -29,6 +29,6 @@ export default defineConfig({
     port: 5173,
     strictPort: true,
     host: true,
-    origin: "http://0.0.0.0:5173",
+    origin: "http://localhost:5173",
   },
 });
