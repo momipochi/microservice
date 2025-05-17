@@ -40,8 +40,7 @@ public class ProductController {
     @PutMapping
     public Mono<ResponseEntity<ProductResponse>> updateProduct(@RequestBody UpdateProductRequest request) {
         return productService.updateProduct(request)
-                .map(ResponseEntity::ok)
-                .switchIfEmpty(Mono.just(ResponseEntity.notFound().build()));
+                .map(ResponseEntity::ok);
     }
 
     @DeleteMapping("/{id}")

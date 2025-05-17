@@ -3,6 +3,8 @@ package com.productservice.productservice.services;
 import java.util.Objects;
 import java.util.UUID;
 
+import com.productservice.productservice.exceptions.ProductHasAlreadyBeenDeletedException;
+import com.productservice.productservice.exceptions.ProductNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -108,53 +110,65 @@ public class ProductService {
         return productRepository.existsByAggregateIdAndEventType(request.id(), EventTypes.PRODUCT_DELETED_EVENT)
                 .flatMap(isDeleted -> {
                     if (isDeleted) {
-                        logger.warn("Cannot update. Product is deleted: {}", request.id());
-                        return Mono.empty();
+                        String msg = String.format("Cannot update. Product is deleted: %s", request.id());
+                        logger.warn(msg);
+                        return Mono.error(new ProductHasAlreadyBeenDeletedException(msg));
                     }
 
-                    // Try to get latest 'ProductUpdated', fallback to 'ProductCreated'
-                    return productRepository
-                            .findLatestNonDeletedEventByAggregateId(request.id())
-                            .doOnNext(p -> logger.info("Product found with id: {}", request.id()))
-                            .switchIfEmpty(Mono.defer(() -> {
-                                logger.warn("No product found with id: {}", request.id());
-                                return Mono.empty();
-                            }))
-                            .flatMap(existing -> {
-                                try {
-                                    Product p = existing.getDeserializedData();
-                                    mapper.updateProduct(request, p);
-
-                                    logger.info("Updating product: {}", p.getName());
-                                    ProductDomain updated = new ProductDomain();
-                                    updated.setAggregateId(existing.getAggregateId());
-                                    updated.setData(p.serialize());
-                                    updated.setEventType(EventTypes.PRODUCT_UPDATED_EVENT);
-                                    ProductUpdatedEvent event = new ProductUpdatedEvent();
-                                    mapper.toUpdateProductEvent(p, event);
-                                    ProductResponse response = toResponse(updated.getAggregateId(), p);
-                                    return productRepository.save(updated)
-                                            .doOnNext(saved -> {
-
-                                                event.setId(saved.getAggregateId());
-                                                kafkaTemplate.send(EventTypes.PRODUCT_UPDATED_EVENT,
-                                                        saved.getAggregateId().toString(), event);
-                                                logger.info("Product saved with aggregateId: {}",
-                                                        saved.getAggregateId());
-                                            }).doOnSuccess(x -> {
-                                                logger.info("Returning response for product with aggregateId: {}",
-                                                        updated.getAggregateId());
-                                            })
-                                            .then(Mono.just(response));
-                                } catch (JsonProcessingException e) {
-                                    logger.error("Serialization failed for product with id: {}", request.id(), e);
-                                    return Mono.error(e);
-                                }
-                            });
+                    return productRepository.findLatestNonDeletedEventByAggregateId(request.id())
+                            .switchIfEmpty(Mono.error(new ProductNotFoundException("No product found with id: " + request.id())))
+                            .flatMap(existing -> updateExistingProduct(existing, request));
                 });
     }
 
-    private ProductResponse toResponse(ProductDomain domain) throws JsonMappingException, JsonProcessingException {
+    private Mono<ProductResponse> updateExistingProduct(ProductDomain existing, UpdateProductRequest request) {
+        Product product = safelyDeserialize(existing);
+        mapper.updateProduct(request, product);
+
+        logger.info("Updating product: {}", product.getName());
+
+        ProductDomain updatedDomain = buildUpdatedProductDomain(existing.getAggregateId(), product);
+        ProductUpdatedEvent event = buildUpdatedEvent(product, updatedDomain.getAggregateId());
+        ProductResponse response = toResponse(updatedDomain.getAggregateId(), product);
+
+        return productRepository.save(updatedDomain)
+                .doOnSuccess(saved -> {
+                    logger.info("Product saved with aggregateId: {}", saved.getAggregateId());
+                    kafkaTemplate.send(EventTypes.PRODUCT_UPDATED_EVENT,
+                            saved.getAggregateId().toString(), event);
+                })
+                .thenReturn(response);
+    }
+
+    private Product safelyDeserialize(ProductDomain domain) {
+        try {
+            return domain.getDeserializedData();
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("Failed to deserialize product data", e);
+        }
+    }
+
+    private ProductDomain buildUpdatedProductDomain(UUID aggregateId, Product product) {
+        ProductDomain domain = new ProductDomain();
+        domain.setAggregateId(aggregateId);
+        domain.setEventType(EventTypes.PRODUCT_UPDATED_EVENT);
+        try {
+            domain.setData(product.serialize());
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("Failed to serialize product", e);
+        }
+        return domain;
+    }
+
+    private ProductUpdatedEvent buildUpdatedEvent(Product product, UUID aggregateId) {
+        ProductUpdatedEvent event = new ProductUpdatedEvent();
+        event.setId(aggregateId);
+        mapper.toUpdateProductEvent(product, event);
+        return event;
+    }
+
+
+    private ProductResponse toResponse(ProductDomain domain) throws JsonProcessingException {
         Product product = domain.getDeserializedData();
         return new ProductResponse(domain.getAggregateId(), product.getName(), product.getDescription(),
                 product.getPrice());

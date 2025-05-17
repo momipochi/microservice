@@ -78,7 +78,7 @@ public class ProductDomain {
         this.data = data;
     }
 
-    public Product getDeserializedData() throws JsonMappingException, JsonProcessingException {
+    public Product getDeserializedData() throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         Product result = mapper.readValue(data, Product.class);
         return result;
