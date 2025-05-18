@@ -22,10 +22,18 @@ As well as many microservice architecture concepts and design patterns such as *
 
 ---
 
-# Futher Reading
+# Current design patterns
 
-Currently this project aims to create a fully functional, enterprise ready microservice. The application runs only on docker at the moment, in the future I plan to add **Kubernetes** to the tech stack, which should be simple as every service was built with **Kubernetes** in mind, it is for now only on docker for the sake of simplicity.
+- CQRS (Command query responsibility segregation)
+- Event driven architecture
+- DDD (Domain driven design)
+- Event sourcing
+- ...more later
 
-Observability is also something missing in the current porject, however, the reason for this is once again, for simplicity, and I do plan to add it to the tech stack in the future. It doesn't make sense at the moment to integrate so many softwares together.
+---
 
-At some point, I would like to also implement Service Mesh architecture. Solutions like **Consul** exist, however, the last time I tried it seemed to not work, so I might have to implement my own using for example Envoy Proxy, which is what **Consul** uses under the hood.
+# Design Intentions
+
+This project, for now, intentionally skips certain designs. `Kubernetes` is now not in the tech stack primarily because this project is meant be only a demo, however, it is designed with scalability in mind, every service is dockerized. Observability tools such as `Jaeger`, `Prometheus` and `Grafana` are also not in this project currently, the reason for this is because setting up these tools are time consuming. `Kubernetes` and other tools that are missing in this project are also primarily due to the time it takes to setup.
+
+Aside from tools, common microservice design patterns are, likewise, not implemented, such as Saga Pattern. The reason for this is the same as the tools mentioned above, some of these concepts are simply quite time consuming, they will be added in the future. If there were to be implemented right now as the project grows, it quickly becomes a mess that is hard to navigate.

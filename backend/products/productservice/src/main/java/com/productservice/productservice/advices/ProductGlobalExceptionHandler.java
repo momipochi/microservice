@@ -32,4 +32,10 @@ public class ProductGlobalExceptionHandler {
                 ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("error", ex.getMessage()))
         );
     }
+    @ExceptionHandler(RuntimeException.class)
+    public Mono<ResponseEntity<Map<String, String>>> handleGlobalRuntimeException(RuntimeException ex) {
+        return Mono.just(
+                ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("error", ex.getMessage()))
+        );
+    }
 }

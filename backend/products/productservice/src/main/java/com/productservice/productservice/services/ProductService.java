@@ -1,6 +1,5 @@
 package com.productservice.productservice.services;
 
-import java.util.Objects;
 import java.util.UUID;
 
 import com.productservice.productservice.exceptions.ProductHasAlreadyBeenDeletedException;
@@ -11,7 +10,6 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.microservice.events.products.ProductCreatedEvent;
 import com.microservice.events.products.ProductDeletedEvent;
@@ -25,7 +23,6 @@ import com.productservice.productservice.mapper.product.ProductMapper;
 import com.productservice.productservice.models.Product;
 import com.productservice.productservice.repositories.ProductRepository;
 
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Service
@@ -33,7 +30,7 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final KafkaTemplate<String, Object> kafkaTemplate;
     private final ProductMapper mapper;
-    Logger logger = LoggerFactory.getLogger(ProductService.class);
+    private final Logger logger = LoggerFactory.getLogger(ProductService.class);
 
     public ProductService(ProductRepository productRepository, KafkaTemplate<String, Object> kafkaTemplate,
             ProductMapper mapper) {
@@ -42,57 +39,39 @@ public class ProductService {
         this.mapper = mapper;
     }
 
-    public ProductRepository getProductRepository() {
-        return productRepository;
-    }
-
-    public Flux<ProductResponse> findAll() {
-        return productRepository.findAll().map(x -> {
-            try {
-                Product p = x.getDeserializedData();
-                return new ProductResponse(x.getAggregateId(), p.getName(), p.getDescription(), p.getPrice());
-            } catch (JsonProcessingException e) {
-                logger.error("Error deserializing data for domain: {}", x.getId(), e);
-                return null;
-            }
-        }).filter(Objects::nonNull).doOnError(e -> {
-            logger.error("Error in the Flux stream: ", e);
-        }).onErrorResume(e -> Flux.empty());
-    }
-
-    public Mono<Product> findById(UUID id) {
-        return productRepository.findById(id).map(x -> {
-            try {
-                return x.getDeserializedData();
-            } catch (JsonProcessingException e) {
-                logger.error("Error deserializing data for domain: {}", x.getId(), e);
-                return null;
-            }
-        });
-    }
-
     public Mono<ProductResponse> createProduct(ProductRequest pr) throws JsonProcessingException {
-        Product p = new Product(pr.name(), pr.description(), pr.price());
+        Product product = new Product(pr.name(), pr.description(), pr.price());
+
         ObjectMapper mapper = new ObjectMapper();
-        String productJsonString = mapper.writeValueAsString(p);
-        ProductDomain pd = new ProductDomain();
-        pd.setData(productJsonString);
-        pd.setEventType(EventTypes.PRODUCT_CREATED_EVENT);
+        String productJsonString = mapper.writeValueAsString(product);
+
+        ProductDomain pd = buildProductCreatedDomain(productJsonString);
+
         return productRepository.save(pd).doOnSuccess(saved -> {
-            ProductCreatedEvent event = new ProductCreatedEvent();
-            event.setId(saved.getAggregateId());
-            event.setDescription(p.getDescription());
-            event.setName(p.getName());
-            event.setPrice(p.getPrice());
+            ProductCreatedEvent event = buildProductCreatedEvent(saved,product);
             kafkaTemplate.send(EventTypes.PRODUCT_CREATED_EVENT, saved.getAggregateId().toString(), event);
         }).map(t -> {
             try {
                 return toResponse(t);
             } catch (JsonProcessingException e) {
                 logger.error("Error converting domain to Product response.", e);
-                return null;
+                throw new RuntimeException("Error converting domain to Product response.", e);
             }
         });
+    }
+    private ProductCreatedEvent buildProductCreatedEvent(ProductDomain domain, Product product){
+        ProductCreatedEvent event = new ProductCreatedEvent();
+        event.setId(domain.getAggregateId());
+        event.setDescription(product.getDescription());
+        event.setName(product.getName());
+        event.setPrice(product.getPrice());
+        return event;
+    }
+    private ProductDomain buildProductCreatedDomain(String productJsonString){
+        ProductDomain pd = new ProductDomain();
+        pd.setEventType(EventTypes.PRODUCT_CREATED_EVENT);
+        pd.setData(productJsonString);
+        return pd;
     }
 
     public Mono<Void> deleteProduct(UUID id) {
