@@ -26,15 +26,20 @@ public class ProductSearchService(IElasticClient elastic)
     {
         var from = (queryObject.Page - 1) * queryObject.SizeLimit;
         var result = await elastic.SearchAsync<Product>(s =>
-            s.Index("products")
-            .From(from)
-            .Size(queryObject.SizeLimit)
-            .Query(q => q
-                .Wildcard(w => w
-                    .Field(f => f.Name)
-                    .Value($"*{queryObject.Query.ToLower()}*")
-                )
-            )
+            {
+                var searchDescriptor = s
+                    .Index("products")
+                    .From(from)
+                    .Size(queryObject.SizeLimit)
+                    .Query(q => q
+                        .Wildcard(w => w
+                            .Field(f => f.Name)
+                            .Value($"*{queryObject.Query.ToLower()}*")
+                        )
+                    );
+                
+                return searchDescriptor;
+            }
         );
 
         return result.Documents;
