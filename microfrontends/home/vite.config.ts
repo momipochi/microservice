@@ -9,7 +9,7 @@ export default defineConfig({
     federation({
       name: "home",
       remotes: {
-        productRemote: "http://localhost:5174/assets/remoteEntry.js",
+        productRemote: "http://localhost:5176/assets/remoteEntry.js",
         searchRemote: "http://localhost:5175/assets/remoteEntry.js",
       },
       shared: ["react", "react-dom", "@tanstack/react-query"],

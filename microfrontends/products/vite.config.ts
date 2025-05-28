@@ -32,6 +32,6 @@ export default defineConfig({
     port: 5174,
     strictPort: true,
     host: true,
-    origin: "http://0.0.0.0:5174",
+    origin: "http://remoteProducts:5174",
   },
 });

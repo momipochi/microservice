@@ -27,7 +27,7 @@ public static class Extensions
         services.AddCors(options =>
         {
             options.AddPolicy("AllowLocalhost",
-                builder => builder.WithOrigins("http://localhost:3000", "http://localhost:5173")
+                builder => builder.WithOrigins("http://localhost:3000", "http://localhost:5173","http://localhost:5174","http://localhost:5175","http://localhost:5176")
                     .AllowAnyHeader()
                     .AllowAnyMethod());
         });

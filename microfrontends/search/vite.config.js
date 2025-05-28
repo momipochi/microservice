@@ -17,7 +17,7 @@ export default defineConfig({
       filename: 'remoteEntry.js',
       // Modules to expose
       exposes: {
-        './Search': './src/components/search.tsx',
+        './Search': './src/components/Search.tsx',
       },
       shared: ['react', 'react-dom', '@tanstack/react-query'],
     }),
