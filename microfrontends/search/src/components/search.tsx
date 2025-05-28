@@ -10,11 +10,10 @@ export const Search = () => {
   const [open, setOpen] = useState(false)
   const wrapperRef = useRef(null)
 
-  // Debounce effect
   useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedQuery(query)
-    }, 500) // 500ms debounce
+    }, 500)
 
     return () => {
       clearTimeout(handler)
