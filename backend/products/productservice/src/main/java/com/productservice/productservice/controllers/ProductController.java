@@ -1,5 +1,6 @@
 package com.productservice.productservice.controllers;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import com.productservice.productservice.dto.ProductResponse;
 import com.productservice.productservice.dto.UpdateProductRequest;
 import com.productservice.productservice.services.ProductService;
 
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @RestController
@@ -36,6 +38,19 @@ public class ProductController {
                     .body(Mono.error(new RuntimeException("Error creating product")));
         }
     }
+    @PostMapping("/bulk")
+    public ResponseEntity<Flux<ProductResponse>> createProducts(@RequestBody List<ProductRequest> requests) {
+        Flux<ProductResponse> responses = Flux.fromIterable(requests)
+                .flatMap(pr -> {
+                    try {
+                        return productService.createProduct(pr);
+                    } catch (JsonProcessingException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+        return ResponseEntity.ok(responses);
+    }
+
 
     @PutMapping
     public Mono<ResponseEntity<ProductResponse>> updateProduct(@RequestBody UpdateProductRequest request) {

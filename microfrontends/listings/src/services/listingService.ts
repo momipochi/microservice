@@ -7,9 +7,9 @@ export interface ProductDTO {
   price: number
 }
 
-export const listingSearch = {
+export const listingService = {
   getListingsByQuery: async (query: string): Promise<ProductDTO[]> => {
-    const res: ProductDTO[] = await apiFetch(`/listings?query=${query}`)
+    const res: ProductDTO[] = await apiFetch(`/listing?query=${query}`)
     return res
   },
 }
