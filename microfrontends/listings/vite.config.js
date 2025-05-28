@@ -1,10 +1,10 @@
-import { resolve } from 'node:path'
 import { defineConfig } from 'vite'
 import viteReact from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import federation from '@originjs/vite-plugin-federation'
 
 import { TanStackRouterVite } from '@tanstack/router-plugin/vite'
+import { resolve } from 'node:path'
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -17,7 +17,7 @@ export default defineConfig({
       filename: 'remoteEntry.js',
       // Modules to expose
       exposes: {
-        './Search': './src/components/search.tsx',
+        './Listings': './src/components/Listings.tsx',
       },
       shared: ['react', 'react-dom', '@tanstack/react-query'],
     }),
@@ -32,19 +32,19 @@ export default defineConfig({
     },
   },
   build: {
-    modulePreload: false,
+    modulePreload: true,
     target: 'esnext',
-    minify: false,
-    cssCodeSplit: false,
+    minify: true,
+    cssCodeSplit: true,
   },
   preview: {
-    port: 5175,
+    port: 5176,
     strictPort: true,
   },
   server: {
-    port: 5175,
+    port: 5176,
     strictPort: true,
     host: true,
-    origin: 'http://0.0.0.0:5175',
+    origin: 'http://0.0.0.0:5176',
   },
 })
