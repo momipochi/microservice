@@ -16,10 +16,10 @@ export default defineConfig({
     }),
   ],
   build: {
-    modulePreload: false,
+    modulePreload: true,
     target: "esnext",
-    minify: false,
-    cssCodeSplit: false,
+    minify: true,
+    cssCodeSplit: true,
   },
   preview: {
     port: 5173,

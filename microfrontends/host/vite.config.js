@@ -1,10 +1,10 @@
-import { resolve } from 'node:path'
 import { defineConfig } from 'vite'
 import viteReact from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import federation from '@originjs/vite-plugin-federation'
 
 import { TanStackRouterVite } from '@tanstack/router-plugin/vite'
+import { resolve } from 'node:path'
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -13,12 +13,10 @@ export default defineConfig({
     viteReact(),
     tailwindcss(),
     federation({
-      name: 'remoteApp',
-      filename: 'remoteEntry.js',
-      // Modules to expose
-      exposes: {
-        './Search': './src/components/Search.tsx',
-        './Listings': './src/components/Listings.tsx',
+      name: 'host',
+      remotes: {
+        productRemote: 'http://localhost:5176/assets/remoteEntry.js',
+        searchRemote: 'http://localhost:5175/assets/remoteEntry.js',
       },
       shared: [
         'react',
@@ -43,14 +41,11 @@ export default defineConfig({
     minify: false,
     cssCodeSplit: false,
   },
-  preview: {
-    port: 5175,
-    strictPort: true,
-  },
+
   server: {
-    port: 5175,
+    port: 3000,
     strictPort: true,
     host: true,
-    origin: 'http://0.0.0.0:5175',
+    origin: 'http://localhost:3000',
   },
 })

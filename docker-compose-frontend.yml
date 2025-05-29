@@ -1,7 +1,7 @@
 services:
-  host-home:
+  host:
     build:
-      context: ./microfrontends/home
+      context: ./microfrontends/host
     ports:
       - "5173:80"
 

@@ -1,4 +1,5 @@
-import Header from '@/components/Header'
+import { Listings } from '@/components/Listings'
+import { Search } from '@/components/Search'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { createRootRoute } from '@tanstack/react-router'
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
@@ -8,7 +9,8 @@ export const Route = createRootRoute({
   component: () => (
     <>
       <QueryClientProvider client={queryClient}>
-        <Header />
+        <Search />
+        <Listings />
         <div>
           Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ullam
           voluptatem omnis sed inventore ea ipsum cupiditate? Consequuntur,

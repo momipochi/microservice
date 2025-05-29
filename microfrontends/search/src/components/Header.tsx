@@ -1,5 +1,4 @@
 import { Link } from '@tanstack/react-router'
-import { Search } from './Search'
 
 export default function Header() {
   return (
@@ -10,7 +9,6 @@ export default function Header() {
         </div>
         <div>Some other routes in the future</div>
       </nav>
-      <Search />
     </header>
   )
 }
