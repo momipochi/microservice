@@ -1,21 +1,17 @@
+import { Header } from '@/components/Header'
 import { createFileRoute, Outlet } from '@tanstack/react-router'
-import { lazy } from 'react'
 
 export const Route = createFileRoute('/_searchLayout')({
   component: LayoutComponent,
 })
 
-const Search = lazy(() =>
-  import('searchRemote/Search').then((mod) => ({
-    default: mod.default?.Search || mod.Search,
-  })),
-)
-
 function LayoutComponent() {
   return (
     <div>
-      <Search />
-      <Outlet></Outlet>
+      <Header />
+      <main className="max-w-[1248px] mx-auto px-4">
+        <Outlet />
+      </main>
     </div>
   )
 }

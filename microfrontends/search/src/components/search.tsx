@@ -3,6 +3,7 @@ import { Input } from './ui/input'
 import { Button } from './ui/button'
 import { useQuery } from '@tanstack/react-query'
 import { searchService, type Product } from '@/services/searchService'
+import { useNavigate } from '@tanstack/react-router'
 
 export const Search = () => {
   const [query, setQuery] = useState('')
@@ -19,6 +20,17 @@ export const Search = () => {
       clearTimeout(handler)
     }
   }, [query])
+  const navigate = useNavigate()
+
+  const handleSearch = () => {
+    if (query.trim()) {
+      navigate({
+        to: '/listing',
+        search: { query: query.trim() },
+      })
+      setOpen(false)
+    }
+  }
 
   const { data } = useQuery({
     queryKey: ['products', debouncedQuery],
@@ -59,8 +71,13 @@ export const Search = () => {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           onFocus={() => setOpen(true)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') handleSearch()
+          }}
         />
-        <Button>Search</Button>
+        <Button className="cursor-pointer" onClick={() => handleSearch()}>
+          Search
+        </Button>
       </div>
 
       {open && filtered.length > 0 && (

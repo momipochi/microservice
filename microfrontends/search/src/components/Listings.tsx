@@ -44,7 +44,7 @@ export const Listings = () => {
   const queryParams = useQueryParams()
   const searchTerm = queryParams.get(LISTING_QUERY)
   const { data } = useQuery({
-    queryKey: ['listings'],
+    queryKey: ['listings', searchTerm],
     queryFn: async (): Promise<ProductDTO[]> => {
       if (!searchTerm) {
         console.log('got no search term')
@@ -52,6 +52,7 @@ export const Listings = () => {
       }
       return await listingService.getListingsByQuery(searchTerm)
     },
+    enabled: !!searchTerm,
   })
   return (
     <div className="flex flex-col gap-6 p-6">
@@ -69,7 +70,6 @@ export const Listings = () => {
               />
             </div>
 
-            {/* Name + Description */}
             <div className="flex-1">
               <h3 className="text-lg font-semibold">{product.name}</h3>
               <p className="text-sm text-muted-foreground">
@@ -77,10 +77,9 @@ export const Listings = () => {
               </p>
             </div>
 
-            {/* Price + Button */}
             <div className="flex flex-col items-end gap-2">
               <p className="text-lg font-bold">{product.price}</p>
-              <Button>Add to Cart</Button>
+              <Button className="cursor-pointer">Add to Cart</Button>
             </div>
           </Card>
         ))}
