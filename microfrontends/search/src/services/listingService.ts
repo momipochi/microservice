@@ -7,12 +7,17 @@ export interface ProductDTO {
   price: number
 }
 
+export interface ProductListingDTO {
+  pages: number
+  currentPage: number
+  products: ProductDTO[]
+}
 export const listingService = {
   getListingsByQuery: async (
     query: string,
     page?: string | null,
     order?: string | null,
-  ): Promise<ProductDTO[]> => {
+  ): Promise<ProductListingDTO> => {
     let term = `/listing?query=${query}`
     if (page) {
       term = `${term}&page=${page}`
@@ -20,7 +25,7 @@ export const listingService = {
     if (order) {
       term = `${term}&order=${order}`
     }
-    const res: ProductDTO[] = await apiFetch(term)
+    const res: ProductListingDTO = await apiFetch(term)
     return res
   },
 }

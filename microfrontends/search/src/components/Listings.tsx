@@ -1,8 +1,12 @@
-import { listingService, type ProductDTO } from '@/services/listingService'
+import {
+  listingService,
+  type ProductListingDTO,
+} from '@/services/listingService'
 import { Button } from './ui/button'
 import { Card } from './ui/card'
 import { useQuery } from '@tanstack/react-query'
 import { useQueryParams } from '@/lib/utils'
+import { ListingPagination } from '@/components/ListingPagination'
 
 // const products = [
 //   {
@@ -49,7 +53,7 @@ export const Listings = () => {
   const orderTerm = queryParams.get(LISTING_ORDER)
   const { data } = useQuery({
     queryKey: ['listings', searchTerm],
-    queryFn: async (): Promise<ProductDTO[]> => {
+    queryFn: async (): Promise<ProductListingDTO> => {
       if (!searchTerm) {
         console.log('got no search term')
         throw Error('no search term bro')
@@ -64,36 +68,43 @@ export const Listings = () => {
   })
   return (
     <>
-      <div className="flex flex-col gap-6 p-6">
-        {data &&
-          data.map((product) => (
-            <Card
-              key={product.id}
-              className="flex flex-row items-center gap-6 p-4"
-            >
-              <div className="w-32 h-32 flex-shrink-0">
-                <img
-                  src="https://static1.squarespace.com/static/530cd931e4b0e49b19b254ec/t/63c6068bcdde5a79958619df/1673922187854/final+logo++copy-1+%281%29.png"
-                  alt={product.name}
-                  className="w-full h-full object-cover rounded-md"
-                />
-              </div>
+      {searchTerm && data && (
+        <>
+          <div className="flex flex-col gap-6 p-6">
+            {data.products.map((product) => (
+              <Card
+                key={product.id}
+                className="flex flex-row items-center gap-6 p-4"
+              >
+                <div className="w-32 h-32 flex-shrink-0">
+                  <img
+                    src="https://static1.squarespace.com/static/530cd931e4b0e49b19b254ec/t/63c6068bcdde5a79958619df/1673922187854/final+logo++copy-1+%281%29.png"
+                    alt={product.name}
+                    className="w-full h-full object-cover rounded-md"
+                  />
+                </div>
 
-              <div className="flex-1">
-                <h3 className="text-lg font-semibold">{product.name}</h3>
-                <p className="text-sm text-muted-foreground">
-                  {product.description}
-                </p>
-              </div>
+                <div className="flex-1">
+                  <h3 className="text-lg font-semibold">{product.name}</h3>
+                  <p className="text-sm text-muted-foreground">
+                    {product.description}
+                  </p>
+                </div>
 
-              <div className="flex flex-col items-end gap-2">
-                <p className="text-lg font-bold">{product.price}</p>
-                <Button className="cursor-pointer">Add to Cart</Button>
-              </div>
-            </Card>
-          ))}
-      </div>
-      <div></div>
+                <div className="flex flex-col items-end gap-2">
+                  <p className="text-lg font-bold">{product.price}</p>
+                  <Button className="cursor-pointer">Add to Cart</Button>
+                </div>
+              </Card>
+            ))}
+          </div>
+          <ListingPagination
+            pages={data.pages}
+            currentPage={data.currentPage}
+            query={searchTerm}
+          />
+        </>
+      )}
     </>
   )
 }
