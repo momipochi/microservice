@@ -11,79 +11,110 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as ListingImport } from './routes/listing'
-import { Route as IndexImport } from './routes/index'
+import { Route as SearchLayoutImport } from './routes/_searchLayout'
+import { Route as SearchLayoutIndexImport } from './routes/_searchLayout/index'
+import { Route as SearchLayoutListingImport } from './routes/_searchLayout/listing'
 
 // Create/Update Routes
 
-const ListingRoute = ListingImport.update({
-  id: '/listing',
-  path: '/listing',
+const SearchLayoutRoute = SearchLayoutImport.update({
+  id: '/_searchLayout',
   getParentRoute: () => rootRoute,
 } as any)
 
-const IndexRoute = IndexImport.update({
+const SearchLayoutIndexRoute = SearchLayoutIndexImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => SearchLayoutRoute,
+} as any)
+
+const SearchLayoutListingRoute = SearchLayoutListingImport.update({
+  id: '/listing',
+  path: '/listing',
+  getParentRoute: () => SearchLayoutRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexImport
+    '/_searchLayout': {
+      id: '/_searchLayout'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof SearchLayoutImport
       parentRoute: typeof rootRoute
     }
-    '/listing': {
-      id: '/listing'
+    '/_searchLayout/listing': {
+      id: '/_searchLayout/listing'
       path: '/listing'
       fullPath: '/listing'
-      preLoaderRoute: typeof ListingImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof SearchLayoutListingImport
+      parentRoute: typeof SearchLayoutImport
+    }
+    '/_searchLayout/': {
+      id: '/_searchLayout/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof SearchLayoutIndexImport
+      parentRoute: typeof SearchLayoutImport
     }
   }
 }
 
 // Create and export the route tree
 
+interface SearchLayoutRouteChildren {
+  SearchLayoutListingRoute: typeof SearchLayoutListingRoute
+  SearchLayoutIndexRoute: typeof SearchLayoutIndexRoute
+}
+
+const SearchLayoutRouteChildren: SearchLayoutRouteChildren = {
+  SearchLayoutListingRoute: SearchLayoutListingRoute,
+  SearchLayoutIndexRoute: SearchLayoutIndexRoute,
+}
+
+const SearchLayoutRouteWithChildren = SearchLayoutRoute._addFileChildren(
+  SearchLayoutRouteChildren,
+)
+
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/listing': typeof ListingRoute
+  '': typeof SearchLayoutRouteWithChildren
+  '/listing': typeof SearchLayoutListingRoute
+  '/': typeof SearchLayoutIndexRoute
 }
 
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/listing': typeof ListingRoute
+  '/listing': typeof SearchLayoutListingRoute
+  '/': typeof SearchLayoutIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
-  '/': typeof IndexRoute
-  '/listing': typeof ListingRoute
+  '/_searchLayout': typeof SearchLayoutRouteWithChildren
+  '/_searchLayout/listing': typeof SearchLayoutListingRoute
+  '/_searchLayout/': typeof SearchLayoutIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/listing'
+  fullPaths: '' | '/listing' | '/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/listing'
-  id: '__root__' | '/' | '/listing'
+  to: '/listing' | '/'
+  id:
+    | '__root__'
+    | '/_searchLayout'
+    | '/_searchLayout/listing'
+    | '/_searchLayout/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  ListingRoute: typeof ListingRoute
+  SearchLayoutRoute: typeof SearchLayoutRouteWithChildren
 }
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  ListingRoute: ListingRoute,
+  SearchLayoutRoute: SearchLayoutRouteWithChildren,
 }
 
 export const routeTree = rootRoute
@@ -96,15 +127,23 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
-        "/",
-        "/listing"
+        "/_searchLayout"
       ]
     },
-    "/": {
-      "filePath": "index.tsx"
+    "/_searchLayout": {
+      "filePath": "_searchLayout.tsx",
+      "children": [
+        "/_searchLayout/listing",
+        "/_searchLayout/"
+      ]
     },
-    "/listing": {
-      "filePath": "listing.tsx"
+    "/_searchLayout/listing": {
+      "filePath": "_searchLayout/listing.tsx",
+      "parent": "/_searchLayout"
+    },
+    "/_searchLayout/": {
+      "filePath": "_searchLayout/index.tsx",
+      "parent": "/_searchLayout"
     }
   }
 }

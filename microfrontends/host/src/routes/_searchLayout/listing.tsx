@@ -1,7 +1,8 @@
+// routes/listing.tsx
 import { createFileRoute } from '@tanstack/react-router'
 import { lazy, Suspense } from 'react'
 
-export const Route = createFileRoute('/listing')({
+export const Route = createFileRoute('/_searchLayout/listing')({
   component: Listing,
 })
 
@@ -13,8 +14,10 @@ const Listings = lazy(() =>
 
 function Listing() {
   return (
-    <Suspense fallback={<div>Loading listings component...</div>}>
-      <Listings />
-    </Suspense>
+    <div>
+      <Suspense fallback={<div>Loading listings...</div>}>
+        <Listings />
+      </Suspense>
+    </div>
   )
 }
