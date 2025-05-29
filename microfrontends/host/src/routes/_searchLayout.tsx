@@ -9,7 +9,7 @@ function LayoutComponent() {
   return (
     <div>
       <Header />
-      <main className="max-w-[1248px] mx-auto px-4">
+      <main className="max-w-[1616px] mx-auto px-4">
         <Outlet />
       </main>
     </div>
