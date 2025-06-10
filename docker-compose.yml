@@ -1,4 +1,11 @@
 services:
+  basket-service:
+    build: ./backend/BasketService
+    container_name: basket_service
+    ports:
+      - 5132:5132
+    networks:
+      - product_network
   notification-service:
     build: ./backend/notifications
     container_name: notification_service
