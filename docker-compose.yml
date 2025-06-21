@@ -1,9 +1,9 @@
 services:
   basket-service:
-    build: ./backend/BasketService
+    build: ./backend/BasketService/BasketService
     container_name: basket_service
     ports:
-      - 5132:5132
+      - 5132:8080
     networks:
       - product_network
   notification-service:

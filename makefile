@@ -26,6 +26,7 @@ rebuild-product:
 	docker compose up -d --build product-command-service
 	docker compose up -d --build product-query-service
 	docker compose up -d --build search-service
+	docker compose up -d --build basket-service
 
 rebuild-frontend:
 	docker compose -f docker-compose-frontend.yml down
