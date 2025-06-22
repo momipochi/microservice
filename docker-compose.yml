@@ -2,6 +2,8 @@ services:
   basket-service:
     build: ./backend/BasketService/BasketService
     container_name: basket_service
+    depends_on:
+      - basket-db
     ports:
       - 5132:8080
     networks:
@@ -70,6 +72,7 @@ services:
       - "8081:8081"
     networks:
       - product_network
+
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.13.4
     container_name: elasticsearch
@@ -98,6 +101,13 @@ services:
     container_name: mongo
     ports:
       - "27017:27017"
+    networks:
+      - product_network
+  basket-db:
+    image: mongo:latest
+    container_name: basket-db
+    ports:
+      - "27018:27017"
     networks:
       - product_network
 
