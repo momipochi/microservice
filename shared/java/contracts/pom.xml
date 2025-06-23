@@ -24,11 +24,11 @@
     </dependencies>
 
     <distributionManagement>
-  <repository>
-   <id>nexus</id>
-   <url>http://localhost:8088/repository/event-contracts/</url>
-  </repository>
- </distributionManagement>
+        <repository>
+        <id>nexus</id>
+        <url>http://nexus:8081/repository/java-shared-classes/</url>
+        </repository>
+    </distributionManagement>
 
     <build>
         <extensions>
