@@ -8,8 +8,8 @@ COPY /settings.xml /root/.m2/settings.xml
 
 # Add this before RUN
 ARG MAVEN_BUILD_ARGS=""
-
-# Modify the build step
+# ENTRYPOINT [ "sh", "-c","sleep 300" ]
+# # Modify the build step
 RUN mvn clean package -DskipTests $MAVEN_BUILD_ARGS
 
 

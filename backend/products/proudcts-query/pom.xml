@@ -79,6 +79,7 @@
         </activation>
         <repositories>
             <repository>
+                <id>nexus</id>
                 <url>http://localhost:8088/repository/java-shared-classes/</url>
             </repository>
             <repository>
@@ -98,6 +99,7 @@
         </activation>
         <repositories>
             <repository>
+                <id>nexus</id>
                 <url>http://nexus:8081/repository/java-shared-classes/</url>
             </repository>
             <repository>

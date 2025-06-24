@@ -24,14 +24,13 @@
   </servers>
 
   <mirrors>
-
+   
+     
     <mirror>
-      <id>maven-default-http-blocker</id>
-      <mirrorOf>external:http:*</mirrorOf>
-      <name>Pseudo repository to mirror external repositories initially using HTTP.</name>
-      <url>http://0.0.0.0/</url>
-      <blocked>true</blocked>
-    </mirror>
+  <id>nexus</id>
+  <mirrorOf>*,!central,!confluent</mirrorOf>
+  <url>http://host.docker.internal:8088/repository/java-shared-classes</url>
+</mirror>
   </mirrors>
 
   <profiles>
