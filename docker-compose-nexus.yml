@@ -13,7 +13,7 @@ services:
 
   nexus-setup:
     build:
-      context: .
+      context: ./dockers/nexus
       dockerfile: Dockerfile-SetupNexus
     volumes:
       - ./scripts:/scripts
@@ -25,15 +25,18 @@ services:
 
   builder:
     build:
-      context: .
+      context: ./dockers/shared
       dockerfile: Dockerfile.Sharedbuilder
     container_name: shared-builder
     depends_on:
       - nexus-setup
     working_dir: /build
+    entrypoint: ["sh"]
+    command: ["-c", "/scripts/wait-for-nexus-repo.sh"]
     volumes:
+      - ./scripts:/scripts
       - ./shared/java/contracts:/build
-      - ./settings.xml:/root/.m2/settings.xml
+      - ./dockers/shared/settings.xml:/root/.m2/settings.xml
     networks:
       - nexus_shared_net
 
