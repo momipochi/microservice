@@ -90,6 +90,7 @@
         <repository>
             <id>nexus</id>
             <url>${nexus.url}</url>
+            
         </repository>
     </repositories>
 
@@ -115,6 +116,7 @@
             </activation>
             <properties>
                 <nexus.url>http://nexus:8081/repository/java-shared-classes/</nexus.url>
+                
             </properties>
         </profile>
     </profiles>
