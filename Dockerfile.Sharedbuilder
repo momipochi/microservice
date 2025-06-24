@@ -1,0 +1,8 @@
+FROM maven:3.9-eclipse-temurin-17
+
+# Copy the custom entrypoint script
+COPY scripts/wait-for-nexus-repo.sh /usr/local/bin/wait-for-nexus-repo.sh
+
+RUN chmod +x /usr/local/bin/wait-for-nexus-repo.sh
+
+ENTRYPOINT ["/usr/local/bin/wait-for-nexus-repo.sh"]

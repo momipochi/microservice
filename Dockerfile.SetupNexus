@@ -1,0 +1,12 @@
+FROM alpine:latest
+
+# Install curl (add bash if you want)
+RUN apk add --no-cache curl
+
+WORKDIR /scripts
+
+COPY /scripts /scripts
+
+RUN chmod +x /scripts/*.sh
+
+CMD ["sh"]
