@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Configuration
-NEXUS_URL="http://nexus:8081"  # Use service name inside Docker network
+NEXUS_URL="http://nexus:8081"
 ADMIN_USER="admin"
 ADMIN_PASS="admin123"
 REPO_NAME="java-shared-classes"
@@ -14,15 +14,26 @@ until curl -s -o /dev/null -w "%{http_code}" -u "$ADMIN_USER:$ADMIN_PASS" "$NEXU
 done
 echo "✅ Nexus is running."
 
+
+echo "🔐 Ensuring required realms are enabled..."
+
+curl -s -u "$ADMIN_USER:$ADMIN_PASS" -X PUT "$NEXUS_URL/service/rest/v1/security/realms/active" \
+  -H "Content-Type: application/json" \
+  -d '[
+        "NexusAuthenticatingRealm",
+        "DefaultRole"
+      ]'
+echo "✅ Security realms configured."
+
 # Check if repo already exists
 REPO_EXISTS=$(curl -s -u "$ADMIN_USER:$ADMIN_PASS" "$NEXUS_URL/service/rest/v1/repositories" | grep "\"name\":\"$REPO_NAME\"")
 
 if [ -n "$REPO_EXISTS" ]; then
   echo "ℹ️ Repository '$REPO_NAME' already exists. Skipping creation."
 else
-  echo "🔧 Creating Maven hosted repository: $REPO_NAME"
+  echo "🔧 Creating Maven hosted SNAPSHOT repository: $REPO_NAME"
 
-  curl -s -o /dev/null -w "%{http_code}" \
+  curl -s -o /dev/null -w "\nHTTP Status: %{http_code}\n" \
     -u "$ADMIN_USER:$ADMIN_PASS" \
     -X POST "$NEXUS_URL/service/rest/v1/repositories/maven/hosted" \
     -H "Content-Type: application/json" \
@@ -35,11 +46,13 @@ else
         \"writePolicy\": \"ALLOW\"
       },
       \"maven\": {
-        \"versionPolicy\": \"RELEASE\",
+        \"versionPolicy\": \"SNAPSHOT\",
         \"layoutPolicy\": \"PERMISSIVE\"
+      },
+      \"cleanup\": {
+        \"policyNames\": []
       }
     }"
 
-  echo ""
   echo "✅ Repository '$REPO_NAME' created."
 fi

@@ -7,9 +7,7 @@ services:
       - NEXUS_SECURITY_INITIAL_PASSWORD=admin123
     ports:
       - "8088:8081"
-    volumes:
-      - nexus-data:/nexus-data
-      - ./admin.password:/nexus-data/admin.password
+
     networks:
       - nexus_shared_net
 
@@ -42,9 +40,6 @@ services:
       ]
     networks:
       - nexus_shared_net
-
-volumes:
-  nexus-data: {}
 
 networks:
   nexus_shared_net:

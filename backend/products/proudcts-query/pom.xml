@@ -65,9 +65,9 @@
     <scope>provided</scope>
 </dependency>
 <dependency>
-  <groupId>com.microservice</groupId>
-  <artifactId>contracts</artifactId>
-  <version>1.0-20250504.103322-5</version>
+	<groupId>com.microservice</groupId>
+	<artifactId>contracts</artifactId>
+	<version>1.0-SNAPSHOT</version>
 </dependency>
 
 	</dependencies>
@@ -79,8 +79,7 @@
         </activation>
         <repositories>
             <repository>
-                <id>event-contracts</id>
-                <url>http://localhost:8088/repository/event-contracts/</url>
+                <url>http://localhost:8088/repository/java-shared-classes/</url>
             </repository>
             <repository>
                 <id>central</id>
@@ -99,8 +98,7 @@
         </activation>
         <repositories>
             <repository>
-                <id>event-contracts</id>
-                <url>http://host.docker.internal:8088/repository/event-contracts/</url>
+                <url>http://nexus:8081/repository/java-shared-classes/</url>
             </repository>
             <repository>
                 <id>central</id>

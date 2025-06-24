@@ -19,18 +19,19 @@
     <server>
         <id>nexus</id>
         <username>admin</username>
-        <password>f6ad3a55-f736-472c-9fc8-2e73a3c3da9a</password>
+        <password>admin123</password>
     </server>
   </servers>
 
   <mirrors>
-   
-     
+
     <mirror>
-  <id>internal-nexus</id>
-  <mirrorOf>*,!central,!confluent</mirrorOf>
-  <url>http://host.docker.internal:8088/repository/event-contracts/</url>
-</mirror>
+      <id>maven-default-http-blocker</id>
+      <mirrorOf>external:http:*,!nexus</mirrorOf>
+      <name>Pseudo repository to mirror external repositories initially using HTTP.</name>
+      <url>http://0.0.0.0/</url>
+      <blocked>true</blocked>
+    </mirror>
   </mirrors>
 
   <profiles>

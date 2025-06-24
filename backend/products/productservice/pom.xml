@@ -68,10 +68,10 @@
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
         <dependency>
-  <groupId>com.microservice</groupId>
-  <artifactId>contracts</artifactId>
-  <version>1.0-20250504.103322-5</version>
-</dependency>
+            <groupId>com.microservice</groupId>
+            <artifactId>contracts</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
         <dependency>
         <groupId>org.mapstruct</groupId>
         <artifactId>mapstruct</artifactId>
@@ -101,7 +101,7 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
             <properties>
-                <nexus.url>http://localhost:8088/repository/event-contracts/</nexus.url>
+                <nexus.url>http://localhost:8088/repository/java-shared-classes/</nexus.url>
             </properties>
         </profile>
 
@@ -114,7 +114,7 @@
                 </property>
             </activation>
             <properties>
-                <nexus.url>http://host.docker.internal:8088/repository/event-contracts/</nexus.url>
+                <nexus.url>http://nexus:8081/repository/java-shared-classes/</nexus.url>
             </properties>
         </profile>
     </profiles>
