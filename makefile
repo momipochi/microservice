@@ -18,7 +18,7 @@ list:
 
 nexus-rebuild:
 	docker-compose -f docker-compose-nexus.yml down
-	docker-compose -f docker-compose-nexus.yml up -d --build
+	docker-compose -f docker-compose-nexus.yml up -d --build --no-deps --force-recreate
 
 
 rebuild-product:

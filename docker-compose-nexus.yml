@@ -14,12 +14,12 @@ services:
   nexus-setup:
     build:
       context: .
-      dockerfile: Dockerfile.SetupNexus
+      dockerfile: Dockerfile-SetupNexus
     volumes:
       - ./scripts:/scripts
     working_dir: /scripts
     entrypoint: ["sh"]
-    command: ["-c", "ls && ./setup-nexus.sh"]
+    command: ["-c", "./setup-nexus.sh"]
     networks:
       - nexus_shared_net
 

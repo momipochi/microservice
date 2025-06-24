@@ -5,7 +5,7 @@ RUN apk add --no-cache curl
 
 WORKDIR /scripts
 
-COPY /scripts /scripts
+COPY ./scripts /scripts
 
 RUN chmod +x /scripts/*.sh
 
