@@ -9,5 +9,8 @@ RUN dotnet publish -c Release -o out
 # Use .NET runtime for production
 FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS runtime
 WORKDIR /app
+
+ENV ASPNETCORE_ENVIRONMENT=Development
+
 COPY --from=build /app/out .
 ENTRYPOINT ["dotnet", "BasketService.dll"]

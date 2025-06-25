@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace BasketService.Models;
 public class BasketItem
@@ -13,6 +14,7 @@ public class BasketItem
 public class Basket
 {
     [Required(ErrorMessage = "UserId is required")]
+    [BsonId]
     public string UserId { get; set; }
     
     public List<BasketItem> Items { get; set; } = new();
