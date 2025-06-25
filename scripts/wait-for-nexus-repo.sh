@@ -3,7 +3,7 @@ set -e
 NEXUS_URL="http://nexus:8081"
 REPO_NAME="java-shared-classes"
 REPO_CHECK_URL="$NEXUS_URL/repository/$REPO_NAME/"
-echo "ï¿½ Waiting for Nexus to be ready at $NEXUS_URL..."
+echo "ý Waiting for Nexus to be ready at $NEXUS_URL..."
 # Wait for Nexus to be up
 until curl -s --head --fail "$NEXUS_URL" > /dev/null; do
   echo "= Nexus not reachable yet..."
@@ -11,13 +11,13 @@ until curl -s --head --fail "$NEXUS_URL" > /dev/null; do
 done
 echo " Nexus is reachable."
 # Wait until the repository responds with HTTP 200
-echo "ï¿½ Waiting for repository $REPO_NAME to be available..."
+echo "ý Waiting for repository $REPO_NAME to be available..."
 until curl -u admin:admin123 -s --head --fail "$REPO_CHECK_URL" | grep "200 OK" > /dev/null; do
   echo "= Waiting for repository '$REPO_NAME'..."
   sleep 5
 done
 echo " Repository '$REPO_NAME' is ready."
 # Run Maven build
-echo "=ï¿½ Starting Maven build..."
+echo "=ý Starting Maven build..."
 cd /build
 mvn clean deploy -DskipTests

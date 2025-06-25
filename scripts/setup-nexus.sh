@@ -5,7 +5,7 @@ ADMIN_USER="admin"
 ADMIN_PASS="admin123"
 REPO_NAME="java-shared-classes"
 # Wait for Nexus to become ready
-echo "ï¿½ Waiting for Nexus to start..."
+echo "ý Waiting for Nexus to start..."
 until curl -s -o /dev/null -w "%{http_code}" -u "$ADMIN_USER:$ADMIN_PASS" "$NEXUS_URL/service/rest/v1/status" | grep -q '^200$'; do
   echo "Nexus not ready yet, retrying in 5 seconds..."
   sleep 5
